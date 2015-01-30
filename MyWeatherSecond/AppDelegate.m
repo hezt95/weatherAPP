@@ -7,16 +7,32 @@
 //
 
 #import "AppDelegate.h"
-
-@interface AppDelegate ()
-
-@end
-
+#import "WeatherViewController.h"
+#import "WeatherNavController.h"
+#import <TSMessage.h>
+#import "MenuTableViewController.h"
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+
+    
+    MenuTableViewController *menuTableViewCtrl = [[MenuTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    WeatherNavController *navCtrl = [[WeatherNavController alloc] initWithRootViewController:[[WeatherViewController alloc] init]];
+//    [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithWhite:10.0 alpha:1.0]];
+    REFrostedViewController *frostedViewController= [[REFrostedViewController alloc] initWithContentViewController:navCtrl menuViewController:menuTableViewCtrl];
+    frostedViewController.direction = REFrostedViewControllerDirectionLeft;
+    frostedViewController.liveBlurBackgroundStyle = REFrostedViewControllerLiveBackgroundStyleLight;
+    frostedViewController.liveBlur = YES;
+    frostedViewController.delegate = self;
+    
+    self.window.rootViewController = frostedViewController;
+    
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
+    
+    [TSMessage setDefaultViewController:self.window.rootViewController];
     return YES;
 }
 
@@ -42,4 +58,31 @@
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
+
+
+
+- (void)frostedViewController:(REFrostedViewController *)frostedViewController didRecognizePanGesture:(UIPanGestureRecognizer *)recognizer
+{
+    
+}
+
+- (void)frostedViewController:(REFrostedViewController *)frostedViewController willShowMenuViewController:(UIViewController *)menuViewController
+{
+    NSLog(@"willShowMenuViewController");
+}
+
+- (void)frostedViewController:(REFrostedViewController *)frostedViewController didShowMenuViewController:(UIViewController *)menuViewController
+{
+    NSLog(@"didShowMenuViewController");
+}
+
+- (void)frostedViewController:(REFrostedViewController *)frostedViewController willHideMenuViewController:(UIViewController *)menuViewController
+{
+    NSLog(@"willHideMenuViewController");
+}
+
+- (void)frostedViewController:(REFrostedViewController *)frostedViewController didHideMenuViewController:(UIViewController *)menuViewController
+{
+    NSLog(@"didHideMenuViewController");
+}
 @end
